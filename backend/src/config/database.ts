@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 // Load environment variables from the .env file
 dotenv.config();
 
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://jerrybony5:xfCiY2r321ZkXwAd@cluster0.vke9emx.mongodb.net/';
+const mongoURI = process.env.MONGODB_URI;
 
 // Optional: Set mongoose options (like strictQuery)
 mongoose.set('strictQuery', false);
