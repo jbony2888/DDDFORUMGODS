@@ -16,13 +16,9 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
   // Use the user routes
-app.use('/', userRoutes);
+app.use('/api/users', userRoutes);
 
 
-// Basic route
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World from Express with TypeScript and MongoDB!');
-});
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
