@@ -5,7 +5,7 @@
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 dotenv.config();
-const mongoURI: string = process.env.MONGODB_URI ?? 'mongodb+srv://jerrybony5:xfCiY2r321ZkXwAd@cluster0.vke9emx.mongodb.net/';
+const mongoURI: string = process.env.MONGODB_URI ??;
 
 
 
