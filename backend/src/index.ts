@@ -1,7 +1,6 @@
 // src/index.ts
 
 import express, { Request, Response, NextFunction } from 'express';
-import mongoose from 'mongoose';
 import { connectDB } from './config/database';  
 import userRoutes from './routes/userRoutes';
 
