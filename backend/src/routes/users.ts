@@ -1,7 +1,7 @@
 import express from 'express';
 import { User } from '../models/User';
 import { generateRandomPassword } from '../utils/password';
-import { ApiResponse, ApiError, UserDTO } from './types';
+import { ApiResponse, ApiError, UserDTO, Errors } from './types';
 
 const router = express.Router();
 
@@ -25,18 +25,18 @@ router.post('/new', async (req, res) => {
 
     // Basic validation
     if (!email || !username || !firstName || !lastName) {
-      return res.status(400).json(err('ValidationError'));
+      return res.status(400).json(err(Errors.ValidationError));
     }
 
     // Uniqueness checks
     const existingByUsername = await User.findOne({ username }).exec();
     if (existingByUsername) {
-      return res.status(409).json(err('UsernameAlreadyTaken'));
+      return res.status(409).json(err(Errors.UsernameAlreadyTaken));
     }
 
     const existingByEmail = await User.findOne({ email }).exec();
     if (existingByEmail) {
-      return res.status(409).json(err('EmailAlreadyInUse'));
+      return res.status(409).json(err(Errors.EmailAlreadyInUse));
     }
 
     const password = generateRandomPassword();
@@ -46,7 +46,7 @@ router.post('/new', async (req, res) => {
     return res.status(201).json(ok<UserDTO>(toDTO(created)));
   } catch (e) {
     console.error(e);
-    return res.status(500).json(err('ServerError'));
+    return res.status(500).json(err(Errors.ServerError));
   }
 });
 
@@ -59,26 +59,26 @@ router.post('/edit/:userId', async (req, res) => {
     // Basic validation - only check provided fields are not null/undefined
     const providedFields = [email, username, firstName, lastName].filter(f => f !== undefined);
     if (providedFields.some((v) => v === null)) {
-      return res.status(400).json(err('ValidationError'));
+      return res.status(400).json(err(Errors.ValidationError));
     }
 
     const user = await User.findOne({ id: Number(userId) }).exec();
     if (!user) {
-      return res.status(404).json(err('UserNotFound'));
+      return res.status(404).json(err(Errors.UserNotFound));
     }
 
     // Check unique constraints if values are changing
     if (username && username !== user.username) {
       const existsU = await User.findOne({ username }).exec();
       if (existsU) {
-        return res.status(409).json(err('UsernameAlreadyTaken'));
+        return res.status(409).json(err(Errors.UsernameAlreadyTaken));
       }
     }
 
     if (email && email !== user.email) {
       const existsE = await User.findOne({ email }).exec();
       if (existsE) {
-        return res.status(409).json(err('EmailAlreadyInUse'));
+        return res.status(409).json(err(Errors.EmailAlreadyInUse));
       }
     }
 
@@ -92,7 +92,7 @@ router.post('/edit/:userId', async (req, res) => {
     return res.status(200).json(ok<UserDTO>(toDTO(user)));
   } catch (e) {
     console.error(e);
-    return res.status(500).json(err('ServerError'));
+    return res.status(500).json(err(Errors.ServerError));
   }
 });
 
@@ -101,18 +101,18 @@ router.get('/', async (req, res) => {
   try {
     const { email } = req.query as { email?: string };
     if (!email) {
-      return res.status(400).json(err('ValidationError'));
+      return res.status(400).json(err(Errors.ValidationError));
     }
 
     const user = await User.findOne({ email }).exec();
     if (!user) {
-      return res.status(404).json(err('UserNotFound'));
+      return res.status(404).json(err(Errors.UserNotFound));
     }
 
     return res.status(200).json(ok<UserDTO>(toDTO(user)));
   } catch (e) {
     console.error(e);
-    return res.status(500).json(err('ServerError'));
+    return res.status(500).json(err(Errors.ServerError));
   }
 });
 
