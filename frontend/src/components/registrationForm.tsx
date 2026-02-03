@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { createUser, showError, showSuccess } from '../api';
 
 export const RegistrationForm: React.FC = () => {
@@ -6,14 +7,21 @@ export const RegistrationForm: React.FC = () => {
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Basic validation
-    if (!email || !username || !firstName || !lastName) {
+    if (!email || !username || !firstName || !lastName || !password || !confirmPassword) {
       showError('All fields are required');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      showError('Passwords do not match');
       return;
     }
 
@@ -25,6 +33,7 @@ export const RegistrationForm: React.FC = () => {
         username,
         firstName,
         lastName,
+        password,
       });
 
       if (response.success && response.data.success) {
@@ -34,6 +43,8 @@ export const RegistrationForm: React.FC = () => {
         setUsername('');
         setFirstName('');
         setLastName('');
+        setPassword('');
+        setConfirmPassword('');
       } else {
         // Handle different error types
         const error = response.data.error;
@@ -59,7 +70,7 @@ export const RegistrationForm: React.FC = () => {
   };
 
   return (
-    <div className="registration-form">
+    <div className="auth-form registration-form">
       <div>Create Account</div>
       <form onSubmit={handleSubmit}>
         <input
@@ -94,10 +105,26 @@ export const RegistrationForm: React.FC = () => {
           onChange={(e) => setLastName(e.target.value)}
           disabled={isSubmitting}
         />
+        <input
+          className="registatation-input username"
+          type="password"
+          placeholder="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          disabled={isSubmitting}
+        />
+        <input
+          className="registatation-input username"
+          type="password"
+          placeholder="confirm password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          disabled={isSubmitting}
+        />
         <div>
           <div className="to-login">
             <div>Already have an account?</div>
-            <a href="/login">Login</a>
+            <Link to="/login">Log in</Link>
           </div>
           <button
             className="submit-button"
@@ -111,4 +138,3 @@ export const RegistrationForm: React.FC = () => {
     </div>
   );
 };
-

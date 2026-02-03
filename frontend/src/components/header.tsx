@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/dddforumlogo.png';
+import { useAuth } from '../context/authContext';
 
 const Logo: React.FC = () => (
   <div id="app-logo">
@@ -20,14 +21,19 @@ interface HeaderActionButtonProps {
   user?: {
     username: string;
   } | null;
+  onLogout?: () => void;
 }
 
-const HeaderActionButton: React.FC<HeaderActionButtonProps> = ({ user }) => (
+const HeaderActionButton: React.FC<HeaderActionButtonProps> = ({ user, onLogout }) => (
   <div id="header-action-button">
     {user ? (
       <div>
         <div>{user.username}</div>
-        <u>
+        <u
+          role="button"
+          onClick={onLogout}
+          style={{ cursor: onLogout ? 'pointer' : 'default' }}
+        >
           <div>logout</div>
         </u>
       </div>
@@ -43,17 +49,23 @@ const shouldShowActionButton = (pathName: string): boolean => {
 
 export const Header: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <header id="header" className="flex align-center">
       <Logo />
       <TitleAndSubmission />
       {shouldShowActionButton(location.pathname) ? (
-        <HeaderActionButton user={null} />
+        <HeaderActionButton user={user} onLogout={handleLogout} />
       ) : (
         null
       )}
     </header>
   );
 };
-

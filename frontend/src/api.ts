@@ -18,6 +18,7 @@ export interface UserData {
   username: string;
   firstName: string;
   lastName: string;
+  password: string;
 }
 
 export interface UserDTO {
@@ -73,6 +74,21 @@ export async function createUser(userData: UserData): Promise<ApiResponse<UserDT
   });
 }
 
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+/**
+ * Authenticate an existing user
+ */
+export async function loginUser(credentials: LoginCredentials): Promise<ApiResponse<UserDTO>> {
+  return apiRequest<UserDTO>('/users/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  });
+}
+
 /**
  * Get user by email
  */
@@ -107,7 +123,7 @@ export function showError(message: string): void {
   errorDiv.textContent = message;
 
   // Insert before the form
-  const form = document.querySelector('.registration-form');
+  const form = document.querySelector('.auth-form') ?? document.querySelector('.registration-form');
   if (form) {
     form.insertBefore(errorDiv, form.firstChild);
   }
@@ -130,9 +146,8 @@ export function showSuccess(message: string): void {
   successDiv.textContent = message;
 
   // Insert before the form
-  const form = document.querySelector('.registration-form');
+  const form = document.querySelector('.auth-form') ?? document.querySelector('.registration-form');
   if (form) {
     form.insertBefore(successDiv, form.firstChild);
   }
 }
-

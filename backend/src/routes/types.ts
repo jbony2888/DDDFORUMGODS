@@ -5,6 +5,7 @@ export const Errors = {
   ServerError: 'ServerError',
   ClientError: 'ClientError',
   UserNotFound: 'UserNotFound',
+  InvalidCredentials: 'InvalidCredentials',
 } as const;
 
 export type ApiError = (typeof Errors)[keyof typeof Errors];

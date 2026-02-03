@@ -168,13 +168,29 @@ body {
   z-index: 8;
 }
 
-.registration-form {
-  max-width: 800px;
+.auth-form {
+  max-width: 520px;
+  width: 100%;
   margin: 0 auto;
-  width: 500px;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
-.registration-form input {
+.auth-form > div {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.auth-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.auth-form input {
   display: block;
   padding: 0.6rem 1rem;
   border-radius: 3px;
@@ -186,4 +202,33 @@ body {
   transition: all .2s;
   font-size: 1rem;
   box-sizing: border-box;
+}
+
+.auth-form input:focus {
+  border-color: rgba(0, 0, 0, 0.9);
+}
+
+.auth-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.auth-footer .submit-button {
+  align-self: flex-end;
+  color: #fff;
+}
+
+.to-login {
+  font-size: 0.9rem;
+  color: #444;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.to-login a {
+  color: #1e90ff;
+  text-decoration: underline;
 }
